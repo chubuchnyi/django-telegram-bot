@@ -1,0 +1,23 @@
+cd
+    2  apt-get install git
+    4  git clone https://github.com/ohld/django-telegram-bot.git
+    5  cd django-telegram-bot/
+    7  sudo apt update
+    8  sudo apt install python3-pip
+   11  apt install python3.10-venv
+
+   12  python3 -m venv dtb_venv
+   13  source dtb_venv/bin/activate
+
+   14  pip install -r requirements.txt
+   15  cp .env_example .env
+
+   16  python manage.py migrate
+   17  python manage.py createsuperuser
+ 
+   19  python run_polling.py &
+   21  python manage.py runserver
+   26  ps
+   27  killall python
+   28  ps
+   34  history

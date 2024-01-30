@@ -8,7 +8,7 @@ from tgbot.handlers.onboarding import static_text
 from tgbot.handlers.utils.info import extract_user_data_from_update
 from users.models import User
 from tgbot.handlers.onboarding.keyboards import make_keyboard_for_start_command
-
+from tgbot.main import bot
 
 def command_start(update: Update, context: CallbackContext) -> None:
     u, created = User.get_user_and_created(update, context)
@@ -20,6 +20,28 @@ def command_start(update: Update, context: CallbackContext) -> None:
 
     update.message.reply_text(text=text,
                               reply_markup=make_keyboard_for_start_command())
+
+
+def add_topic(update: Update, context: CallbackContext) -> None:
+    # callback_data: ADD_TOPIC_BUTTON variable from manage_data.py
+    """ Pressed 'add_topic' after /start command"""
+    user_id = extract_user_data_from_update(update)['user_id']
+    #Create the Topic in telegram groupe
+    #bot.send_message(chat_id=user_id, text="Please enter the name of the topic")
+    u, created = User.get_user_and_created(update, context)
+    text = "test"
+    if created:
+        text = static_text.start_created.format(first_name=u.first_name)
+        chat_id=-1002011361450
+        chat = bot.getChat(chat_id=chat_id)
+        #check if the topic already exist with the same name
+        
+        topic = bot.createForumTopic(chat_id=-1002011361450, name=text)
+    else:
+        bot.sendMessage(chat_id=user_id, text="Please enter request")
+    
+    
+
 
 
 def secret_level(update: Update, context: CallbackContext) -> None:

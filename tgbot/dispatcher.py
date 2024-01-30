@@ -10,7 +10,7 @@ from telegram.ext import (
 from dtb.settings import DEBUG
 from tgbot.handlers.broadcast_message.manage_data import CONFIRM_DECLINE_BROADCAST
 from tgbot.handlers.broadcast_message.static_text import broadcast_command
-from tgbot.handlers.onboarding.manage_data import SECRET_LEVEL_BUTTON
+from tgbot.handlers.onboarding.manage_data import SECRET_LEVEL_BUTTON, ADD_TOPIC_BUTTON
 
 from tgbot.handlers.utils import files, error
 from tgbot.handlers.admin import handlers as admin_handlers
@@ -26,7 +26,7 @@ def setup_dispatcher(dp):
     """
     # onboarding
     dp.add_handler(CommandHandler("start", onboarding_handlers.command_start))
-
+    dp.add_handler(CallbackQueryHandler(onboarding_handlers.add_topic, pattern=f"^{ADD_TOPIC_BUTTON}"))
     # admin commands
     dp.add_handler(CommandHandler("admin", admin_handlers.admin))
     dp.add_handler(CommandHandler("stats", admin_handlers.stats))
