@@ -9,12 +9,23 @@ from tgbot.handlers.utils.info import extract_user_data_from_update
 from users.models import User
 from tgbot.handlers.onboarding.keyboards import make_keyboard_for_start_command
 from tgbot.main import bot
-
+from dtb.settings import CRM_CHAT_ID
 def command_start(update: Update, context: CallbackContext) -> None:
     u, created = User.get_user_and_created(update, context)
 
     if created:
         text = static_text.start_created.format(first_name=u.first_name)
+        
+        chat_id=CRM_CHAT_ID
+        
+        #check if the topic already exist with the same name
+        
+        topic = bot.createForumTopic(chat_id=chat_id, name=u.first_name)
+        topic_id = str(chat_id)+"_"+str(topic.message_thread_id)
+        print ("topic", topic_id)
+        User.set_user_topic_id(user_id=u.user_id, topic_id=topic_id)
+        print ("topic", User.get_user_topic_id(user_id=u.user_id))
+        bot.sendMessage(chat_id=topic_id, text="Warm welcom to new user "+u.first_name)
     else:
         text = static_text.start_not_created.format(first_name=u.first_name)
 
@@ -32,18 +43,20 @@ def add_topic(update: Update, context: CallbackContext) -> None:
     text = "test"
     if created:
         text = static_text.start_created.format(first_name=u.first_name)
-        chat_id=-1002011361450
-        chat = bot.getChat(chat_id=chat_id)
+        chat_id=CRM_CHAT_ID
+        
         #check if the topic already exist with the same name
         
-        topic = bot.createForumTopic(chat_id=-1002011361450, name=text)
+        topic = bot.createForumTopic(chat_id=chat_id, name=u.first_name)
+        topic_id = str(chat_id)+"_"+str(topic.message_thread_id)
+        print ("topic", topic_id)
+        User.set_user_topic_id(user_id=u.user_id, topic_id=topic_id)
+        print ("topic", User.get_user_topic_id(user_id=u.user_id))
+        bot.sendMessage(chat_id=topic_id, text="Warm welcom to new user "+u.first_name)
     else:
         bot.sendMessage(chat_id=user_id, text="Please enter request")
     
     
-
-
-
 def secret_level(update: Update, context: CallbackContext) -> None:
     # callback_data: SECRET_LEVEL_BUTTON variable from manage_data.py
     """ Pressed 'secret_level_button_text' after /start command"""

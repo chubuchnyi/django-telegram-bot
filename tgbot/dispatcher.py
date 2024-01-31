@@ -5,6 +5,7 @@ from telegram.ext import (
     Dispatcher, Filters,
     CommandHandler, MessageHandler,
     CallbackQueryHandler,
+    Updater, CallbackContext,
 )
 
 from dtb.settings import DEBUG

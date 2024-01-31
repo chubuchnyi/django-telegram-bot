@@ -21,3 +21,4 @@ cd
    27  killall python
    28  ps
    34  history
+   sudo code /home/admin/django-telegram-bot --user-data-dir='/home/admin/vscodedata' --no-sandbox

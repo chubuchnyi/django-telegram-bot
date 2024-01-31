@@ -21,6 +21,8 @@ class User(CreateUpdateTracker):
     username = models.CharField(max_length=32, **nb)
     first_name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256, **nb)
+    topic_id = models.CharField(max_length=256, **nb)
+    user_amount = models.DecimalField(max_digits=10, decimal_places=2, **nb)
     language_code = models.CharField(max_length=8, help_text="Telegram client's lang", **nb)
     deep_link = models.CharField(max_length=64, **nb)
 
@@ -34,6 +36,39 @@ class User(CreateUpdateTracker):
     def __str__(self):
         return f'@{self.username}' if self.username is not None else f'{self.user_id}'
 
+
+    @classmethod
+    def set_user_topic_id(cls, user_id: int, topic_id: str):
+        """ set user topic ID"""
+        u = cls.objects.filter(user_id=user_id).first()
+        u.topic_id = topic_id
+        u.save()
+
+    @classmethod
+    def get_user_topic_id(cls, user_id: int) -> str:
+        """ get user topic ID"""
+        u = cls.objects.filter(user_id=user_id).first()
+        return u.topic_id 
+    
+    @classmethod
+    def get_topic_user_id(cls, topic_id: str) -> int:
+        """ get user topic ID"""
+        u = cls.objects.filter(topic_id=topic_id).first()
+        return u.user_id
+
+    @classmethod
+    def set_user_amount(cls, user_id: int, user_amount: float):
+        """ set user topic ID"""
+        u = cls.objects.filter(user_id=user_id).first()
+        u.topic_id = user_amount
+        u.save()
+
+    @classmethod
+    def get_user_amount(cls, user_id: int) -> float:
+        """ get user topic ID"""
+        u = cls.objects.filter(user_id=user_id).first()
+        return u.user_amount 
+    
     @classmethod
     def get_user_and_created(cls, update: Update, context: CallbackContext) -> Tuple[User, bool]:
         """ python-telegram-bot's Update, Context --> User instance """

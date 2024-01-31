@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # local apps
     'users.apps.UsersConfig',
+    'tgbot'#.management.commands.forward_messages.Command',
 ]
 
 MIDDLEWARE = [
@@ -158,7 +159,7 @@ if TELEGRAM_TOKEN is None:
         "Example of .env file: https://github.com/ohld/django-telegram-bot/blob/main/.env_example"
     )
     sys.exit(1)
-
+CRM_CHAT_ID = os.getenv("CRM_CHAT_ID")
 TELEGRAM_LOGS_CHAT_ID = os.getenv("TELEGRAM_LOGS_CHAT_ID", default=None)
 
 # -----> SENTRY
