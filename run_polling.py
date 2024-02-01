@@ -27,34 +27,16 @@ def run_polling(tg_token: str = TELEGRAM_TOKEN):
     print(f"Polling of '{bot_link}' has started")
     # it is really useful to send '👋' emoji to developer
     # when you run local test
-    # bot.send_message(text='👋', chat_id=<YOUR TELEGRAM ID>)
+    # bot.send_message(text='👋', chat_id=<YOUR TELEGRAM ID>
 
-
-    def forward_message_to_user(user_id, message):
-            # Use the bot token to send a message to the user
-            print(updater.bot.send_message(chat_id=user_id, text=message))
-
-    def forward_message_to_group(chat_id, message):
-        # Use the bot token to send a message to the group chat
-        #id is the substring of the chat_id = CRM_CHAT_ID + "_" + str(message_thread_id)
-        message_thread_id = chat_id.split("_")[1]
-
-        print(updater.bot.sendMessage(chat_id=CRM_CHAT_ID, text=message,message_thread_id = message_thread_id))
-
-        #send message to the thread of the chat
-        #updater.bot.sendMessage(chat_id=group_chat_id, text=message, reply_to_message_id=update.message.message_id, message_thread_id=update.message.message_thread_id)
-
-    def forward_group_message(update, context):
-        # Extract message content and sender informatio
-        message = update.message.text            
+    def forward_group_message(update, context):        
         user_chat_id = CRM_CHAT_ID + "_" + str(update.message.message_thread_id)
         user_id = User.get_topic_user_id(user_chat_id)
-        print("forward_group_message", user_id, message, user_chat_id)
         if user_id is None:
             print("user_id is None")
             return
         try:
-            forward_message_to_user(user_id, message)
+            updater.bot.copyMessage(chat_id=user_id, from_chat_id=update.message.chat_id, message_id=update.message.message_id,protect_content = True)
         except:
             print("user_id", str(user_id), "is not valid")
             return
@@ -64,30 +46,17 @@ def run_polling(tg_token: str = TELEGRAM_TOKEN):
     dp.add_handler(group_message_handler)
 
     def forward_user_message(update, context):
-        # Extract message content and chat (group) information
-        message = update.message.text
         user_id=update.message.from_user.id
-        
         group_chat_id=User.get_user_topic_id(user_id=user_id)
-        #updater.bot.forwardMessage(chat_id=group_chat_id, from_chat_id=update.message.chat_id, message_id=update.message.message_id)
-        print("forward_user_message", user_id, message, group_chat_id)
         if group_chat_id is None:
             print("group_chat_id is None")
             return
-        
+        print("group_chat_id", group_chat_id)
+        message_thread_id = group_chat_id.split("_")[1]
         try:
-            forward_message_to_group(group_chat_id, message)
+            updater.bot.copyMessage(chat_id=CRM_CHAT_ID, from_chat_id=update.message.chat_id, message_id=update.message.message_id,protect_content = True, message_thread_id = message_thread_id)
         except:
-            print("user_id", str(user_id), "is not valid")
-
-        # if update.message.is_topic_message == True:
-        #     group_chat_id=update.message.message_thread_id
-        # user_name= update.message.from_user.username
-        # print("user_name",user_name, group_chat_id, message)
-        # # Forward the message to the group chat
-        # forward_message_to_group(group_chat_id, message)
-
-            
+            print("user_id", str(user_id), "is not valid")      
 
     user_message_handler = MessageHandler(Filters.chat_type.private, forward_user_message)
     dp.add_handler(user_message_handler)

@@ -42,6 +42,7 @@ to update db
    42  python manage.py createsuperuser
 
 
+
 source dtb_venv/bin/activate
 python manage.py flush
 python run_polling.py
