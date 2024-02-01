@@ -22,3 +22,26 @@ cd
    28  ps
    34  history
    sudo code /home/admin/django-telegram-bot --user-data-dir='/home/admin/vscodedata' --no-sandbox
+
+
+start the message forwarding
+       python manage.py forward_messages
+   24  python manage.py help
+
+   27  python manage.py dumpdata
+
+   29  python manage.py clearsessions
+
+ start the bot  
+   30  python run_polling.py
+
+   
+to update db
+   40  python manage.py makemigrations
+   41  python manage.py migrate
+   42  python manage.py createsuperuser
+
+
+source dtb_venv/bin/activate
+python manage.py flush
+python run_polling.py

@@ -21,11 +21,12 @@ def command_start(update: Update, context: CallbackContext) -> None:
         #check if the topic already exist with the same name
         
         topic = bot.createForumTopic(chat_id=chat_id, name=u.first_name)
+        print ("topic", topic)
         topic_id = str(chat_id)+"_"+str(topic.message_thread_id)
         print ("topic", topic_id)
         User.set_user_topic_id(user_id=u.user_id, topic_id=topic_id)
-        print ("topic", User.get_user_topic_id(user_id=u.user_id))
-        bot.sendMessage(chat_id=topic_id, text="Warm welcom to new user "+u.first_name)
+        # print ("topic", User.get_user_topic_id(user_id=u.user_id))
+        # bot.sendMessage(chat_id=topic_id, text="Warm welcom to new user "+u.first_name)
     else:
         text = static_text.start_not_created.format(first_name=u.first_name)
 
